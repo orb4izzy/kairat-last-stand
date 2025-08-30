@@ -448,8 +448,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Game objects
         let goalkeeper = { 
-            x: 425, 
-            y: 320, 
+            x: 440, 
+            y: 290, 
             width: 50, 
             height: 80, 
             jumping: false,
@@ -478,9 +478,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         let goal = {
             x: 350,
-            y: 200,
-            width: 200,
-            height: 150
+            y: 250,
+            width: 240,
+            height: 80
         };
         
         // Game functions
@@ -515,7 +515,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 goalkeeper.jumpHeight -= 5;
             }
             
-            goalkeeper.y = 320 - goalkeeper.jumpHeight;
+            goalkeeper.y = 290 - goalkeeper.jumpHeight;
             
             // Update AI player kick timer
             aiPlayer.kickTimer++;
@@ -565,18 +565,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ctx.lineWidth = 3;
             ctx.strokeRect(50, 50, canvas.width - 100, canvas.height - 100);
             
-            // Draw goal
+            // Draw goal posts
             ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 5;
-            ctx.strokeRect(goal.x, goal.y, goal.width, goal.height);
+            ctx.lineWidth = 8;
+            // Left post
+            ctx.beginPath();
+            ctx.moveTo(goal.x, goal.y);
+            ctx.lineTo(goal.x, goal.y + goal.height);
+            ctx.stroke();
+            // Right post
+            ctx.beginPath();
+            ctx.moveTo(goal.x + goal.width, goal.y);
+            ctx.lineTo(goal.x + goal.width, goal.y + goal.height);
+            ctx.stroke();
+            // Crossbar
+            ctx.beginPath();
+            ctx.moveTo(goal.x, goal.y);
+            ctx.lineTo(goal.x + goal.width, goal.y);
+            ctx.stroke();
             
             // Draw goal net
-            ctx.strokeStyle = '#fff';
+            ctx.strokeStyle = 'rgba(255,255,255,0.3)';
             ctx.lineWidth = 1;
-            for (let i = 0; i < 10; i++) {
+            // Vertical net lines
+            for (let i = 0; i < 12; i++) {
                 ctx.beginPath();
-                ctx.moveTo(goal.x, goal.y + (i * 15));
-                ctx.lineTo(goal.x + goal.width, goal.y + (i * 15));
+                ctx.moveTo(goal.x + (i * 20), goal.y);
+                ctx.lineTo(goal.x + (i * 20), goal.y + goal.height);
+                ctx.stroke();
+            }
+            // Horizontal net lines
+            for (let i = 0; i < 8; i++) {
+                ctx.beginPath();
+                ctx.moveTo(goal.x, goal.y + (i * 10));
+                ctx.lineTo(goal.x + goal.width, goal.y + (i * 10));
                 ctx.stroke();
             }
             
@@ -816,8 +838,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         canvas.addEventListener('mousemove', (e) => {
             const rect = canvas.getBoundingClientRect();
             goalkeeper.x = e.clientX - rect.left - 25;
-            if (goalkeeper.x < goal.x + 10) goalkeeper.x = goal.x + 10;
-            if (goalkeeper.x > goal.x + goal.width - 60) goalkeeper.x = goal.x + goal.width - 60;
+            if (goalkeeper.x < goal.x + 20) goalkeeper.x = goal.x + 20;
+            if (goalkeeper.x > goal.x + goal.width - 70) goalkeeper.x = goal.x + goal.width - 70;
         });
         
         // Keyboard controls
