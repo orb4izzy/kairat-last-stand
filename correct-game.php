@@ -717,9 +717,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const goalCenterX = goal.x + goal.width / 2;
             const goalCenterY = goal.y + goal.height / 2;
             
-            // Random target within goal (but more centered)
-            const targetX = goalCenterX + (Math.random() - 0.5) * 60; // Reduced horizontal spread
-            const targetY = goalCenterY + (Math.random() - 0.5) * 40; // Reduced vertical spread
+            // Random target within goal (more centered and realistic)
+            const targetX = goalCenterX + (Math.random() - 0.5) * 80; // Slightly wider spread
+            const targetY = goalCenterY + (Math.random() - 0.5) * 30; // Reduced vertical spread
             
             // Calculate velocity to reach target
             const distanceX = targetX - ball.x;
@@ -727,9 +727,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
             
             // Adjust speed based on distance and difficulty
-            const speed = (ballSpeed + Math.random() * 1.5) * 1.2; // Slightly reduced speed for closer distance
+            const speed = (ballSpeed + Math.random() * 1.5) * 1.3; // Slightly increased speed
             ball.vx = (distanceX / distance) * speed;
-            ball.vy = (distanceY / distance) * speed - 0.5; // Less upward arc for straighter shot
+            ball.vy = (distanceY / distance) * speed; // No upward arc for straighter shot
             
             ball.active = true;
             ball.trail = [];
