@@ -469,7 +469,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         let aiPlayer = { 
             x: 470, 
-            y: 320, 
+            y: 380, 
             width: 40, 
             height: 60, 
             kicking: false,
