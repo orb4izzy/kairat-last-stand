@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kairat's Last Stand - Standalone Game</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="public/css/game.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        .navbar-brand {
+            color: #fff !important;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                ⚽ Kairat's Last Stand
+            </a>
+        </div>
+    </nav>
+
+    <main class="container mt-4">
+        <div class="game-container">
+            <!-- Main Menu -->
+            <div id="mainMenu" class="game-screen">
+                <div class="text-center">
+                    <h1 class="display-4 text-white mb-4">⚽ Kairat's Last Stand</h1>
+                    <p class="lead text-white-50 mb-5">Defend the goal as Danil Anarbekov against Celtic's penalty shots!</p>
+                    
+                    <div class="game-info mb-4">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="info-card">
+                                    <h5 class="text-white">🎯 Objective</h5>
+                                    <p class="text-white-50">Save as many penalty shots as possible</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-card">
+                                    <h5 class="text-white">🎮 Controls</h5>
+                                    <p class="text-white-50">Mouse: Move goalkeeper<br>Space: Jump/Save</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-card">
+                                    <h5 class="text-white">🏆 Scoring</h5>
+                                    <p class="text-white-50">+10 per save<br>Streak bonuses available!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="startGameBtn" class="btn btn-primary btn-lg px-5 py-3">
+                        🚀 Start Game
+                    </button>
+                </div>
+            </div>
+
+            <!-- Game Screen -->
+            <div id="gameScreen" class="game-screen" style="display: none;">
+                <div class="game-ui">
+                    <div class="ui-top">
+                        <div class="score-display">
+                            <span class="label">Score:</span>
+                            <span id="score">0</span>
+                        </div>
+                        <div class="lives-display">
+                            <span class="label">Lives:</span>
+                            <div id="lives">
+                                <span class="life">❤️</span>
+                                <span class="life">❤️</span>
+                                <span class="life">❤️</span>
+                            </div>
+                        </div>
+                        <div class="streak-display">
+                            <span class="label">Streak:</span>
+                            <span id="streak">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <canvas id="gameCanvas" width="800" height="600"></canvas>
+                
+                <div class="game-controls">
+                    <p class="text-white text-center">Move mouse to control goalkeeper • Press SPACE to jump/save</p>
+                </div>
+            </div>
+
+            <!-- Game Over Screen -->
+            <div id="gameOverScreen" class="game-screen" style="display: none;">
+                <div class="text-center">
+                    <h1 class="display-4 text-white mb-4">🏁 Game Over!</h1>
+                    
+                    <div class="final-stats mb-4">
+                        <div class="stat-card">
+                            <h3 class="text-white">Final Score</h3>
+                            <div class="stat-value" id="finalScore">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3 class="text-white">Highest Streak</h3>
+                            <div class="stat-value" id="finalStreak">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3 class="text-white">Shots Saved</h3>
+                            <div class="stat-value" id="finalSaves">0</div>
+                        </div>
+                    </div>
+
+                    <div class="game-over-actions">
+                        <button id="playAgainBtn" class="btn btn-primary btn-lg me-3">
+                            🔄 Play Again
+                        </button>
+                        <button id="backToMenuBtn" class="btn btn-secondary btn-lg">
+                            🏠 Back to Menu
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="public/js/game.js"></script>
+    <script>
+        // Game state for standalone version
+        let gameState = {
+            isPlaying: false,
+            score: 0,
+            lives: 3,
+            streak: 0,
+            sessionId: null,
+            startTime: null
+        };
+
+        // Initialize game when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const startBtn = document.getElementById('startGameBtn');
+            const playAgainBtn = document.getElementById('playAgainBtn');
+            const backToMenuBtn = document.getElementById('backToMenuBtn');
+            
+            startBtn.addEventListener('click', startGame);
+            playAgainBtn.addEventListener('click', startGame);
+            backToMenuBtn.addEventListener('click', backToMenu);
+        });
+
+        function startGame() {
+            gameState.isPlaying = true;
+            gameState.score = 0;
+            gameState.lives = 3;
+            gameState.streak = 0;
+            gameState.startTime = Date.now();
+            
+            // Show game screen
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('gameOverScreen').style.display = 'none';
+            document.getElementById('gameScreen').style.display = 'block';
+            
+            // Initialize game canvas
+            initGame();
+        }
+
+        function backToMenu() {
+            document.getElementById('gameScreen').style.display = 'none';
+            document.getElementById('gameOverScreen').style.display = 'none';
+            document.getElementById('mainMenu').style.display = 'block';
+        }
+
+        function updateUI() {
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('streak').textContent = gameState.streak;
+            
+            const livesElement = document.getElementById('lives');
+            livesElement.innerHTML = '';
+            for (let i = 0; i < gameState.lives; i++) {
+                livesElement.innerHTML += '<span class="life">❤️</span>';
+            }
+        }
+
+        function gameOver() {
+            gameState.isPlaying = false;
+            
+            // Update final stats
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('finalStreak').textContent = gameState.streak;
+            document.getElementById('finalSaves').textContent = Math.floor(gameState.score / 10);
+            
+            // Show game over screen
+            document.getElementById('gameScreen').style.display = 'none';
+            document.getElementById('gameOverScreen').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
