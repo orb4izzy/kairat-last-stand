@@ -448,8 +448,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Game objects
         let goalkeeper = { 
-            x: 400, 
-            y: 350, 
+            x: 425, 
+            y: 320, 
             width: 50, 
             height: 80, 
             jumping: false,
@@ -468,8 +468,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         };
         
         let aiPlayer = { 
-            x: 150, 
-            y: 250, 
+            x: 450, 
+            y: 300, 
             width: 40, 
             height: 60, 
             kicking: false,
@@ -515,7 +515,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 goalkeeper.jumpHeight -= 5;
             }
             
-            goalkeeper.y = 350 - goalkeeper.jumpHeight;
+            goalkeeper.y = 320 - goalkeeper.jumpHeight;
             
             // Update AI player kick timer
             aiPlayer.kickTimer++;
@@ -684,8 +684,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function kickBall() {
             ball.x = aiPlayer.x + 40;
             ball.y = aiPlayer.y + 30;
-            ball.vx = ballSpeed + Math.random() * 2;
-            ball.vy = -3 - Math.random() * 2;
+            
+            // Calculate trajectory to goal
+            const goalCenterX = goal.x + goal.width / 2;
+            const goalCenterY = goal.y + goal.height / 2;
+            
+            // Random target within goal
+            const targetX = goalCenterX + (Math.random() - 0.5) * 100;
+            const targetY = goalCenterY + (Math.random() - 0.5) * 80;
+            
+            // Calculate velocity to reach target
+            const distanceX = targetX - ball.x;
+            const distanceY = targetY - ball.y;
+            const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+            
+            // Adjust speed based on distance and difficulty
+            const speed = ballSpeed + Math.random() * 1.5;
+            ball.vx = (distanceX / distance) * speed;
+            ball.vy = (distanceY / distance) * speed - 2; // Slight upward arc
+            
             ball.active = true;
             ball.trail = [];
             aiPlayer.kicking = true;
@@ -799,8 +816,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         canvas.addEventListener('mousemove', (e) => {
             const rect = canvas.getBoundingClientRect();
             goalkeeper.x = e.clientX - rect.left - 25;
-            if (goalkeeper.x < goal.x) goalkeeper.x = goal.x;
-            if (goalkeeper.x > goal.x + goal.width - 50) goalkeeper.x = goal.x + goal.width - 50;
+            if (goalkeeper.x < goal.x + 10) goalkeeper.x = goal.x + 10;
+            if (goalkeeper.x > goal.x + goal.width - 60) goalkeeper.x = goal.x + goal.width - 60;
         });
         
         // Keyboard controls
