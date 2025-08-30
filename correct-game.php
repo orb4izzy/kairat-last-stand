@@ -449,7 +449,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Game objects
         let goalkeeper = { 
             x: 440, 
-            y: 290, 
+            y: 240, 
             width: 50, 
             height: 80, 
             jumping: false,
@@ -478,7 +478,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         let goal = {
             x: 350,
-            y: 250,
+            y: 200,
             width: 240,
             height: 80
         };
@@ -515,7 +515,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 goalkeeper.jumpHeight -= 5;
             }
             
-            goalkeeper.y = 290 - goalkeeper.jumpHeight;
+            goalkeeper.y = 240 - goalkeeper.jumpHeight;
             
             // Update AI player kick timer
             aiPlayer.kickTimer++;
@@ -617,33 +617,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Draw ball
             if (ball.active) {
                 // Ball shadow
-                ctx.fillStyle = 'rgba(0,0,0,0.3)';
+                ctx.fillStyle = 'rgba(0,0,0,0.4)';
                 ctx.beginPath();
-                ctx.arc(ball.x + 3, ball.y + 3, ball.radius, 0, Math.PI * 2);
+                ctx.arc(ball.x + 4, ball.y + 4, ball.radius, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // Ball
+                // Ball main color
                 ctx.fillStyle = '#fff';
                 ctx.beginPath();
                 ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // Ball pattern
+                // Ball outline
                 ctx.strokeStyle = '#000';
-                ctx.lineWidth = 3;
+                ctx.lineWidth = 4;
                 ctx.beginPath();
                 ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
                 ctx.stroke();
                 
-                // Ball lines
+                // Ball pattern lines
                 ctx.strokeStyle = '#000';
-                ctx.lineWidth = 2;
+                ctx.lineWidth = 3;
                 ctx.beginPath();
                 ctx.moveTo(ball.x - ball.radius, ball.y);
                 ctx.lineTo(ball.x + ball.radius, ball.y);
                 ctx.moveTo(ball.x, ball.y - ball.radius);
                 ctx.lineTo(ball.x, ball.y + ball.radius);
                 ctx.stroke();
+                
+                // Ball highlight
+                ctx.fillStyle = 'rgba(255,255,255,0.6)';
+                ctx.beginPath();
+                ctx.arc(ball.x - 5, ball.y - 5, ball.radius/3, 0, Math.PI * 2);
+                ctx.fill();
             }
             
             // Draw goalkeeper (Kairat - yellow/black stripes)
