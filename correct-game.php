@@ -462,7 +462,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             y: 0, 
             vx: 0, 
             vy: 0, 
-            radius: 20, 
+            radius: 25, 
             active: false,
             trail: []
         };
@@ -604,8 +604,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             // Draw ball trail
             if (ball.trail.length > 1) {
-                ctx.strokeStyle = 'rgba(255,255,255,0.3)';
-                ctx.lineWidth = 3;
+                ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+                ctx.lineWidth = 5;
                 ctx.beginPath();
                 ctx.moveTo(ball.trail[0].x, ball.trail[0].y);
                 for (let i = 1; i < ball.trail.length; i++) {
@@ -616,28 +616,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             // Draw ball
             if (ball.active) {
-                // Ball shadow
-                ctx.fillStyle = 'rgba(0,0,0,0.4)';
+                // Ball shadow (darker and more visible)
+                ctx.fillStyle = 'rgba(0,0,0,0.6)';
                 ctx.beginPath();
-                ctx.arc(ball.x + 4, ball.y + 4, ball.radius, 0, Math.PI * 2);
+                ctx.arc(ball.x + 6, ball.y + 6, ball.radius, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // Ball main color
-                ctx.fillStyle = '#fff';
+                // Ball main color (bright white)
+                ctx.fillStyle = '#ffffff';
                 ctx.beginPath();
                 ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // Ball outline
-                ctx.strokeStyle = '#000';
-                ctx.lineWidth = 4;
+                // Ball outline (thick black border)
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 6;
                 ctx.beginPath();
                 ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
                 ctx.stroke();
                 
-                // Ball pattern lines
-                ctx.strokeStyle = '#000';
-                ctx.lineWidth = 3;
+                // Ball pattern lines (thick and visible)
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 4;
                 ctx.beginPath();
                 ctx.moveTo(ball.x - ball.radius, ball.y);
                 ctx.lineTo(ball.x + ball.radius, ball.y);
@@ -645,11 +645,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ctx.lineTo(ball.x, ball.y + ball.radius);
                 ctx.stroke();
                 
-                // Ball highlight
-                ctx.fillStyle = 'rgba(255,255,255,0.6)';
+                // Ball highlight (bright white spot)
+                ctx.fillStyle = '#ffffff';
                 ctx.beginPath();
-                ctx.arc(ball.x - 5, ball.y - 5, ball.radius/3, 0, Math.PI * 2);
+                ctx.arc(ball.x - 8, ball.y - 8, ball.radius/2, 0, Math.PI * 2);
                 ctx.fill();
+                
+                // Additional contrast ring
+                ctx.strokeStyle = '#333333';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(ball.x, ball.y, ball.radius - 3, 0, Math.PI * 2);
+                ctx.stroke();
             }
             
             // Draw goalkeeper (Kairat - yellow/black stripes)
