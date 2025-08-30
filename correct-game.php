@@ -468,8 +468,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         };
         
         let aiPlayer = { 
-            x: 450, 
-            y: 300, 
+            x: 300, 
+            y: 320, 
             width: 40, 
             height: 60, 
             kicking: false,
@@ -699,9 +699,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
             
             // Adjust speed based on distance and difficulty
-            const speed = ballSpeed + Math.random() * 1.5;
+            const speed = (ballSpeed + Math.random() * 1.5) * 1.5; // Increased speed for longer distance
             ball.vx = (distanceX / distance) * speed;
-            ball.vy = (distanceY / distance) * speed - 2; // Slight upward arc
+            ball.vy = (distanceY / distance) * speed - 1; // Slight upward arc
             
             ball.active = true;
             ball.trail = [];
