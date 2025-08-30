@@ -111,9 +111,9 @@
    DB_CONNECTION=mysql
    DB_HOST=127.0.0.1
    DB_PORT=3306
-   DB_DATABASE=kairat_game
-   DB_USERNAME=kairat_user
-   DB_PASSWORD=strong_password_here
+   DB_DATABASE=adilusse_kairat_game
+   DB_USERNAME=adilusse_kairat_user
+   DB_PASSWORD=ua877739873100
 
    LOG_CHANNEL=stack
    LOG_LEVEL=error
